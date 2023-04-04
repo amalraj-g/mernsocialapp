@@ -1,15 +1,14 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 const secret = 'winner';
+const badRequest = 400;
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const isCustomAuth = token.length < 500;
-
+    const token = req.headers.Authorization.split(' ')[1];
     let decodedData;
 
-    if (token && isCustomAuth) {      
+    if (token) {      
       decodedData = jwt.verify(token, secret);
 
       req.userId = decodedData?.id;
@@ -21,8 +20,8 @@ const auth = async (req, res, next) => {
 
     next();
   } catch (error) {
-    //console.log(error);
-    res.status(400).send("bad token");
+    
+    res.status(badRequest).send('bad token');
   }
 };
 

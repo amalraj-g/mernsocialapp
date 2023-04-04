@@ -6,7 +6,7 @@ import Message from '../models/postMessage.js';
 const router = express.Router();
 
 const ok=200;
-const Not_found = 404;
+const notFound = 404;
 const conflict = 409;
 const created = 201;
 
@@ -62,7 +62,7 @@ export const deletePost = async (req, res) => {
 
 export const likePost = async (req, res) => {
     const { id } = req.params;
-    //const likes=[];
+
     
     try{
        if (!req.userId) {
