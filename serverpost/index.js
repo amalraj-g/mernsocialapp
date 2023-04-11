@@ -8,6 +8,7 @@ dotenv.config();
 
 import postRoutes from './routes/posts.js';
 import userRoutes from './routes/users.js';
+import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
 const value='30mb';
@@ -18,6 +19,8 @@ app.use(cors());
 
 app.use('/posts', postRoutes);
 app.use('/users', userRoutes);
+
+app.use(errorHandler);
 
 const CONNECTION_URL = `mongodb+srv://${process.env.USER_NAME}:${process.env.PASSWORD}@mern-social-cluster.3zpbdns.mongodb.net/memories`;
 const PORT = process.env.PORT|| 5000;

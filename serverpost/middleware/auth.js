@@ -1,26 +1,46 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import {  unAuthorized, serverError } from '../constants/values.js';
+dotenv.config();
 
-const secret = 'winner';
-const badRequest = 400;
-
-const auth = async (req, res, next) => {
+const auth = async ( req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
-        let decodedData;
-
-        if (token) {      
-            decodedData = jwt.verify(token, secret);
-
-            req.userId = decodedData?.id;
-        } else {
+        let decodedData; 
+                    
+        if (token){ 
+            jwt.verify(token, process.env.SECRET,(err,decodedData)=>{
+                if(err){
+                    throw new Error('jsonWebTokenError');
+                } else{
+                    
+                    req.userId = decodedData?.id;
+                }
+            });
+           
+        }
+        else {
             decodedData = jwt.decode(token);
             req.userId = decodedData?.sub;
-        }    
-
-        next();
+                    
+        }
+       
+                    
+        
     } catch (error) {
-        res.status(badRequest).send('bad token');
+        console.log(error);
+        if(error.message ==='jsonWebTokenError'){
+            next({status:unAuthorized, message:'invalid token'});
+        }else{
+            next({status:serverError, message:'internal serverError generated'});
+        }
+        
+            
     }
+
+      
+    
 };
+    
 
 export default auth;

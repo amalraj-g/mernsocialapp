@@ -2,11 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import User from '../models/users.js';
-
-const ok=200;
-const notFound = 404;
-const badRequest = 400;
-const serverError =500;
+import { ok, notFound, badRequest, serverError } from '../constants/values.js'; 
 
 export const signin = async (req, res) => {
     const { email, password } = req.body;
@@ -19,7 +15,7 @@ export const signin = async (req, res) => {
         const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
         if(!isPasswordCorrect)return res.status(badRequest).json({ message: 'Invalid credential'});
             
-        const token = jwt.sign({email:existingUser.email, id: existingUser._id} ,'winner', {expiresIn:'1hr'});
+        const token = jwt.sign({email:existingUser.email, id: existingUser._id} ,process.env.SECRET, {expiresIn:'1hr'});
         res.status(ok).json({ token});
 
     } catch(error){

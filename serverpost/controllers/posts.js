@@ -2,14 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import Message from '../models/postMessage.js';
-
+import { ok, notFound, conflict, created, badRequest } from '../constants/values.js';
 const router = express.Router();
-
-const ok=200;
-const notFound = 404;
-const conflict = 409;
-const created = 201;
-
 
 export const getPosts = async (req, res) => { 
     try {
@@ -20,7 +14,6 @@ export const getPosts = async (req, res) => {
         res.status( notFound).json({ message: error.message });
     }
 };
-
 
 
 export const createPost = async (req, res) => {
@@ -82,7 +75,7 @@ export const likePost = async (req, res) => {
         const updatedPost = await Message.findByIdAndUpdate(id, post, { new: true });
         res.status(ok).json(updatedPost);
     } catch (error) {
-        res.status(notFound).json('not liked');
+        res.status(badRequest).json(' likes are not given');
     }
 };
 
