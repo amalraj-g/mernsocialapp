@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 
 const errorHandler = async(Error, req, res, next) => {
     res.status(Error.status);
@@ -8,7 +6,5 @@ const errorHandler = async(Error, req, res, next) => {
       
 };
                
-  
-
-
 export default errorHandler;
+

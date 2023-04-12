@@ -15,6 +15,7 @@ const auth = async ( req, res, next) => {
                 } else{
                     
                     req.userId = decodedData?.id;
+                    next();
                 }
             });
            
