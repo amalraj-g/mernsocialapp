@@ -6,42 +6,32 @@ dotenv.config();
 const auth = async ( req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
-        let decodedData; 
-                    
+       
         if (token){ 
-            jwt.verify(token, process.env.SECRET,(err,decodedData)=>{
+            jwt.verify(token, process.env.SECRET,(err,decoded)=>{
                 if(err){
                     throw new Error('jsonWebTokenError');
                 } else{
                     
-                    req.userId = decodedData?.id;
+                    req.userId = decoded?.id;
                     next();
                 }
             });
-           
         }
         else {
-            decodedData = jwt.decode(token);
+            let decodedData = jwt.decode(token);
             req.userId = decodedData?.sub;
                     
         }
-       
-                    
-        
     } catch (error) {
-        console.log(error);
         if(error.message ==='jsonWebTokenError'){
             next({status:unAuthorized, message:'invalid token'});
         }else{
             next({status:serverError, message:'internal serverError generated'});
         }
         
-            
     }
 
-      
-    
 };
     
-
 export default auth;
